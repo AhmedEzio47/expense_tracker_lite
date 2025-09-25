@@ -1,4 +1,7 @@
+import 'package:expense_tracker_lite/core/enums/expense_filter.dart';
+import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'balance_card.dart';
 
@@ -10,9 +13,7 @@ class HeaderSection extends StatefulWidget {
 }
 
 class _HeaderSectionState extends State<HeaderSection> {
-  String _selectedFilter = "This month";
-
-  final List<String> _filters = ["This month", "Last 7 days"];
+  ExpenseFilter _selectedFilter = ExpenseFilter.monthly;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: DropdownButton<String>(
+                      child: DropdownButton<ExpenseFilter>(
                         value: _selectedFilter,
                         padding: EdgeInsets.all(5),
                         isDense: true,
@@ -83,11 +84,11 @@ class _HeaderSectionState extends State<HeaderSection> {
                           color: Colors.black,
                         ),
                         style: const TextStyle(color: Colors.black),
-                        items: _filters.map((filter) {
+                        items: ExpenseFilter.values.map((filter) {
                           return DropdownMenuItem(
                             value: filter,
                             child: Text(
-                              filter,
+                              filter.label,
                               style: const TextStyle(color: Colors.black),
                             ),
                           );
@@ -95,6 +96,9 @@ class _HeaderSectionState extends State<HeaderSection> {
                         onChanged: (value) {
                           if (value != null) {
                             setState(() => _selectedFilter = value);
+                            context.read<ExpensesBloc>().add(
+                              ExpensesRefreshed(filter: _selectedFilter),
+                            );
                           }
                         },
                       ),
