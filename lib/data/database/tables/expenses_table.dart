@@ -9,5 +9,6 @@ class ExpensesTable extends Table {
   DateTimeColumn get date => dateTime()();
   IntColumn get categoryId => integer()();
   TextColumn get receiptFilePath => text().nullable()();
+  BoolColumn get isIncome => boolean()();
   DateTimeColumn get createAt => dateTime().withDefault(currentDateAndTime)();
 }

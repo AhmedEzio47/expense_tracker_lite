@@ -37,17 +37,26 @@ enum Category {
     icon: Icons.directions_car_outlined,
     color: Colors.blue,
   ),
-  rent(id: 7, name: 'Rent', icon: Icons.home_outlined, color: Colors.orange);
+  rent(id: 7, name: 'Rent', icon: Icons.home_outlined, color: Colors.orange),
+  income(
+    id: 8,
+    name: 'Income',
+    icon: Icons.attach_money,
+    color: Colors.green,
+    isIncome: true,
+  );
 
   final int id;
   final String name;
   final IconData icon;
   final Color color;
+  final bool isIncome;
 
   const Category({
     required this.id,
     required this.name,
     required this.icon,
     required this.color,
+    this.isIncome = false,
   });
 }

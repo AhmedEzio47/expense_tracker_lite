@@ -7,13 +7,13 @@ sealed class AddExpenseEvent {
 final class ExpenseSubmitted extends AddExpenseEvent {
   const ExpenseSubmitted({
     required this.amount,
-    required this.categoryId,
+    required this.category,
     required this.date,
     this.receiptImagePath,
   });
 
   final double amount;
-  final int categoryId;
+  final Category category;
   final DateTime date;
   final String? receiptImagePath;
 }

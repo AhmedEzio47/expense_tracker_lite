@@ -97,11 +97,11 @@ class AddExpenseContent extends HookWidget {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(2020),
                   lastDate: DateTime(2030),
-                  currentDate: selectedDate.value,
                 );
                 if (picked != null) {
                   dateController.text =
                       "${picked.day}/${picked.month}/${picked.year}";
+                  selectedDate.value = picked;
                 }
               },
             ),
@@ -161,7 +161,7 @@ class AddExpenseContent extends HookWidget {
 
                       context.read<AddExpenseBloc>().add(
                         ExpenseSubmitted(
-                          categoryId: selectedCategory.value!.id,
+                          category: selectedCategory.value!,
                           amount: double.tryParse(amountController.text) ?? 0.0,
                           date: selectedDate.value,
                         ),
