@@ -60,4 +60,34 @@ mixin ReceiptHandler {
       return null;
     }
   }
+
+  void showReceiptImage(BuildContext context, String path) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(32),
+        child: Center(
+          child: Column(
+            spacing: 8,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.file(
+                File(path),
+                errorBuilder: (_, _, _) =>
+                    Center(child: Icon(Icons.image_not_supported)),
+              ),
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.white),
+                ),
+                child: Text('Close'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:expense_tracker_lite/core/extensions/date_formatting.dart';
 import 'package:expense_tracker_lite/data/models/expense_model.dart';
+import 'package:expense_tracker_lite/presentation/screens/add_expense/handlers/receipt_handler.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses/expenses_bloc.dart';
 import 'package:expense_tracker_lite/presentation/widgets/base_bloc_consumer.dart';
 import 'package:flutter/material.dart';
@@ -115,60 +116,70 @@ class _ListHeader extends StatelessWidget {
   }
 }
 
-class _ExpenseItem extends StatelessWidget {
+class _ExpenseItem extends StatelessWidget with ReceiptHandler {
   final ExpenseModel expense;
 
   const _ExpenseItem({required this.expense});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: Colors.grey.shade200,
-            child: Icon(expense.category.icon, color: Colors.blue),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                expense.category.name,
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Manually",
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${expense.isIncome ? '+' : '-'} \$ ${expense.amount}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                expense.date.formattedYMD,
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-            ],
-          ),
-        ],
+    return InkWell(
+      onTap: () {
+        if (expense.receiptFilePath != null) {
+          showReceiptImage(context, expense.receiptFilePath!);
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.grey.shade200,
+              child: Icon(expense.category.icon, color: Colors.blue),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  expense.category.name,
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 5,
+                  children: [
+                    const Text(
+                      "Manually",
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                    if (expense.receiptFilePath != null)
+                      Icon(Icons.link, size: 15, color: Colors.grey.shade700),
+                  ],
+                ),
+              ],
+            ),
+            Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '${expense.isIncome ? '+' : '-'} \$ ${expense.amount}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  expense.date.formattedYMD,
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
