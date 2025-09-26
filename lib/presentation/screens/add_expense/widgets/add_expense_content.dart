@@ -156,40 +156,44 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
                 if (state.status == Status.loading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (selectedCategory == null ||
-                          amountController.text.isEmpty ||
-                          dateController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Please fill all required fields"),
+                return Hero(
+                  tag: 'add_expense',
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (selectedCategory == null ||
+                            amountController.text.isEmpty ||
+                            dateController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please fill all required fields"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        context.read<AddExpenseBloc>().add(
+                          ExpenseSubmitted(
+                            category: selectedCategory,
+                            amount:
+                                double.tryParse(amountController.text) ?? 0.0,
+                            date: selectedDate.value,
+                            receiptImagePath: receiptPath.value,
                           ),
                         );
-                        return;
-                      }
-
-                      context.read<AddExpenseBloc>().add(
-                        ExpenseSubmitted(
-                          category: selectedCategory,
-                          amount: double.tryParse(amountController.text) ?? 0.0,
-                          date: selectedDate.value,
-                          receiptImagePath: receiptPath.value,
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ),
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
                     ),
                   ),
                 );

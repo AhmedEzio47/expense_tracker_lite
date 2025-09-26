@@ -50,6 +50,7 @@ class _BottomNavBar extends StatelessWidget {
             onPressed: null,
           ),
           FloatingActionButton(
+            heroTag: 'add_expense',
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () {
               Navigator.push(
