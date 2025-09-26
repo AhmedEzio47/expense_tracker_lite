@@ -1,13 +1,14 @@
 import 'package:expense_tracker_lite/core/enums/category.dart';
 import 'package:expense_tracker_lite/presentation/common/status.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/bloc/add_expense_bloc.dart';
+import 'package:expense_tracker_lite/presentation/screens/add_expense/handlers/receipt_handler.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/widgets/categories_grid.dart';
 import 'package:expense_tracker_lite/presentation/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AddExpenseContent extends HookWidget {
+class AddExpenseContent extends HookWidget with ReceiptHandler {
   const AddExpenseContent({super.key});
 
   @override
@@ -16,6 +17,8 @@ class AddExpenseContent extends HookWidget {
     final dateController = useTextEditingController();
     final receiptController = useTextEditingController();
     final selectedDate = useState<DateTime>(DateTime.now());
+    final receiptPath = useState<String?>(null);
+
     final selectedCategory = context
         .select((AddExpenseBloc bloc) => bloc.state)
         .selectedCategory;
@@ -118,8 +121,13 @@ class AddExpenseContent extends HookWidget {
               hintText: "Upload image",
               readOnly: true,
               suffixIcon: Icons.camera_alt_outlined,
-              onTap: () {
-                // TODO: Pick image
+              onTap: () async {
+                final receiptImage = await pickImage(context);
+                if (receiptImage != null) {
+                  final path = await saveReceiptFile(receiptImage, context);
+                  receiptPath.value = path;
+                  receiptController.text = path ?? '';
+                }
               },
             ),
 
@@ -168,6 +176,7 @@ class AddExpenseContent extends HookWidget {
                           category: selectedCategory,
                           amount: double.tryParse(amountController.text) ?? 0.0,
                           date: selectedDate.value,
+                          receiptImagePath: receiptPath.value,
                         ),
                       );
                     },

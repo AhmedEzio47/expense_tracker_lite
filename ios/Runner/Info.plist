@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Enable user to pick a receipt image to be stored along with the transaction</string>
+    <key>NSCameraUsageDescription</key>
+	<string>Enable user to take a photo of a receipt to be stored along with the transaction</string>
 </dict>
 </plist>
