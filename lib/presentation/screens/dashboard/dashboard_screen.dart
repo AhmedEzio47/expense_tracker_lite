@@ -4,7 +4,7 @@ import 'package:expense_tracker_lite/presentation/screens/dashboard/widgets/dash
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/expenses_bloc.dart';
+import 'bloc/expenses/expenses_bloc.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
