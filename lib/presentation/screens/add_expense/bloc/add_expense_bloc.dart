@@ -13,24 +13,31 @@ class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
   final AddExpenseUseCase addExpenseUseCase;
 
   AddExpenseBloc(this.addExpenseUseCase) : super(AddExpenseState()) {
-    on<ExpenseSubmitted>((event, emit) async {
-      emit(state.copyWith(status: Status.loading));
+    on<ExpenseSubmitted>(_onExpenseSubmitted);
+    on<CategorySelected>(_onCategorySelected);
+  }
 
-      final result = await addExpenseUseCase(
-        ExpenseModel(
-          amount: event.amount,
-          category: event.category,
-          receiptFilePath: event.receiptImagePath,
-          date: event.date,
-          isIncome: event.category.isIncome,
-        ),
-      );
+  Future<void> _onExpenseSubmitted(ExpenseSubmitted event, emit) async {
+    emit(state.copyWith(status: Status.loading));
 
-      result.fold(
-        (failure) =>
-            emit(state.copyWith(status: Status.failure, failure: failure)),
-        (_) => emit(state.copyWith(status: Status.success)),
-      );
-    });
+    final result = await addExpenseUseCase(
+      ExpenseModel(
+        amount: event.amount,
+        category: event.category,
+        receiptFilePath: event.receiptImagePath,
+        date: event.date,
+        isIncome: event.category.isIncome,
+      ),
+    );
+
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(status: Status.failure, failure: failure)),
+      (_) => emit(state.copyWith(status: Status.success)),
+    );
+  }
+
+  void _onCategorySelected(event, emit) {
+    emit(state.copyWith(selectedCategory: event.category));
   }
 }

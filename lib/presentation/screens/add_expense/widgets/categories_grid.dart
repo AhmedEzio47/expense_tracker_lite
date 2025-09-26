@@ -1,5 +1,7 @@
 import 'package:expense_tracker_lite/core/enums/category.dart';
+import 'package:expense_tracker_lite/presentation/screens/add_expense/bloc/add_expense_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CategoriesGrid extends HookWidget {
@@ -7,7 +9,9 @@ class CategoriesGrid extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedCategory = useState<Category?>(Category.groceries);
+    final selectedCategory = context
+        .select((AddExpenseBloc bloc) => bloc.state)
+        .selectedCategory;
 
     return GridView.builder(
       shrinkWrap: true,
@@ -20,10 +24,10 @@ class CategoriesGrid extends HookWidget {
       itemCount: Category.values.length,
       itemBuilder: (context, index) {
         final cat = Category.values[index];
-        final isSelected = cat == selectedCategory.value;
+        final isSelected = cat == selectedCategory;
         return GestureDetector(
           onTap: () {
-            selectedCategory.value = cat;
+            context.read<AddExpenseBloc>().add(CategorySelected(cat));
           },
           child: Column(
             children: [

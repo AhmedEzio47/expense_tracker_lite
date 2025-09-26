@@ -12,11 +12,13 @@ class AddExpenseContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedCategory = useState<Category?>(null);
     final amountController = useTextEditingController();
     final dateController = useTextEditingController();
     final receiptController = useTextEditingController();
     final selectedDate = useState<DateTime>(DateTime.now());
+    final selectedCategory = context
+        .select((AddExpenseBloc bloc) => bloc.state)
+        .selectedCategory;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -46,12 +48,14 @@ class AddExpenseContent extends HookWidget {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<Category>(
-              initialValue: selectedCategory.value,
+              initialValue: selectedCategory,
               items: Category.values.map((cat) {
                 return DropdownMenuItem(value: cat, child: Text(cat.name));
               }).toList(),
               onChanged: (value) {
-                selectedCategory.value = value;
+                if (value != null) {
+                  context.read<AddExpenseBloc>().add(CategorySelected(value));
+                }
               },
               decoration: InputDecoration(
                 filled: true,
@@ -148,7 +152,7 @@ class AddExpenseContent extends HookWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (selectedCategory.value == null ||
+                      if (selectedCategory == null ||
                           amountController.text.isEmpty ||
                           dateController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -161,7 +165,7 @@ class AddExpenseContent extends HookWidget {
 
                       context.read<AddExpenseBloc>().add(
                         ExpenseSubmitted(
-                          category: selectedCategory.value!,
+                          category: selectedCategory,
                           amount: double.tryParse(amountController.text) ?? 0.0,
                           date: selectedDate.value,
                         ),

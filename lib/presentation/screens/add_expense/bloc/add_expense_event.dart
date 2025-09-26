@@ -17,3 +17,9 @@ final class ExpenseSubmitted extends AddExpenseEvent {
   final DateTime date;
   final String? receiptImagePath;
 }
+
+final class CategorySelected extends AddExpenseEvent {
+  const CategorySelected(this.category);
+
+  final Category category;
+}
