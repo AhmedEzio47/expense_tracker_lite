@@ -18,7 +18,6 @@ class DashboardContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const HeaderSection(),
-          const SizedBox(height: 16),
           Expanded(child: RecentExpensesList()),
         ],
       ),

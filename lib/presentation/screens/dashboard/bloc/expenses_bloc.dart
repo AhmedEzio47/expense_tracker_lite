@@ -15,6 +15,7 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
   ExpensesBloc(this.getExpensesUseCase) : super(ExpensesState()) {
     on<ExpensesFetched>(_onExpensesFetched);
     on<ExpensesRefreshed>(_onExpensesRefreshed);
+    on<ExpensesListToggled>(_toggleExpensesList);
   }
 
   int _page = 1;
@@ -53,5 +54,12 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     _page = 1;
     emit(ExpensesState());
     add(ExpensesFetched(filter: event.filter));
+  }
+
+  void _toggleExpensesList(
+    ExpensesListToggled event,
+    Emitter<ExpensesState> emit,
+  ) {
+    emit(state.copyWith(isListExpanded: !state.isListExpanded));
   }
 }

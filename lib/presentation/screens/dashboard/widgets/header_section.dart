@@ -17,12 +17,19 @@ class _HeaderSectionState extends State<HeaderSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isListExpanded = context.select(
+      (ExpensesBloc bloc) => bloc.state.isListExpanded,
+    );
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.43,
+      height: !isListExpanded
+          ? MediaQuery.of(context).size.height * 0.43
+          : null,
       child: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.35,
+            height: !isListExpanded
+                ? MediaQuery.of(context).size.height * 0.35
+                : null,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -122,13 +129,14 @@ class _HeaderSectionState extends State<HeaderSection> {
           //     ),
           //   ),
           // ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.17,
-            child: const Align(
-              alignment: Alignment.bottomCenter,
-              child: BalanceCard(),
+          if (!isListExpanded)
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.17,
+              child: const Align(
+                alignment: Alignment.bottomCenter,
+                child: BalanceCard(),
+              ),
             ),
-          ),
         ],
       ),
     );

@@ -3,6 +3,9 @@ import 'package:expense_tracker_lite/data/models/expense_model.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses_bloc.dart';
 import 'package:expense_tracker_lite/presentation/widgets/base_bloc_consumer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bouncing_arrow.dart';
 
 class RecentExpensesList extends StatelessWidget {
   const RecentExpensesList({super.key});
@@ -11,29 +14,50 @@ class RecentExpensesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocConsumer<ExpensesBloc, ExpensesState>(
       onSuccess: (context, state) {
+        final data = state.isListExpanded
+            ? state.expenses
+            : state.expenses.take(4).toList();
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    "Recent Expenses",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-                  ),
-                  Text("See all", style: TextStyle(color: Colors.black)),
-                ],
-              ),
-              const SizedBox(height: 8),
+              if (!state.isListExpanded) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Recent Expenses",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => context.read<ExpensesBloc>().add(
+                        ExpensesListToggled(),
+                      ),
+                      child: Text(
+                        "See all",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ] else
+                BouncingArrow(),
+
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) =>
-                      _ExpenseItem(expense: state.expenses[index]),
-                  itemCount: state.expenses.length,
+                      _ExpenseItem(expense: data[index]),
+                  itemCount: data.length,
                 ),
               ),
             ],

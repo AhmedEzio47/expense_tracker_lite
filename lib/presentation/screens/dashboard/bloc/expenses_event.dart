@@ -15,3 +15,7 @@ class ExpensesRefreshed extends ExpensesEvent {
 
   final ExpenseFilter filter;
 }
+
+class ExpensesListToggled extends ExpensesEvent {
+  const ExpensesListToggled();
+}
