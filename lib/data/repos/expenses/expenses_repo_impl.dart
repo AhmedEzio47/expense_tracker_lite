@@ -39,7 +39,15 @@ class ExpensesRepoImpl implements ExpensesRepo {
       final query = database.expensesTable.select();
       switch (filter) {
         case ExpenseFilter.monthly:
-          query.where((e) => e.date.month.equals(DateTime.now().month));
+          final now = DateTime.now();
+          final startOfMonth = DateTime(now.year, now.month, 1);
+          final startOfNextMonth = DateTime(now.year, now.month + 1, 1);
+
+          query.where(
+            (e) =>
+                e.date.isBiggerOrEqualValue(startOfMonth) &
+                e.date.isSmallerThanValue(startOfNextMonth),
+          );
         case ExpenseFilter.weekly:
           query.where(
             (e) => e.date.isBiggerOrEqualValue(
