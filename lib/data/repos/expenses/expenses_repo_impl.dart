@@ -48,6 +48,9 @@ class ExpensesRepoImpl implements ExpensesRepo {
       }
 
       query.limit(kPerPage, offset: kPerPage * (page - 1));
+      query.orderBy([
+        (e) => OrderingTerm(expression: e.date, mode: OrderingMode.desc),
+      ]);
       final result = await query.get();
       final expenses = result
           .map((e) => ExpenseModel.fromTableData(e))
