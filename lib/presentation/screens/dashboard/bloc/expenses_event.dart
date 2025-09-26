@@ -5,9 +5,9 @@ sealed class ExpensesEvent {
 }
 
 class ExpensesFetched extends ExpensesEvent {
-  const ExpensesFetched({required this.filter});
+  const ExpensesFetched({this.filter});
 
-  final ExpenseFilter filter;
+  final ExpenseFilter? filter;
 }
 
 class ExpensesRefreshed extends ExpensesEvent {

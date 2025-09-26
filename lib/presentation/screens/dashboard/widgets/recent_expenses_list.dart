@@ -1,5 +1,6 @@
 import 'package:expense_tracker_lite/core/extensions/date_formatting.dart';
 import 'package:expense_tracker_lite/data/models/expense_model.dart';
+import 'package:expense_tracker_lite/data/repos/expenses/expenses_repo_impl.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses_bloc.dart';
 import 'package:expense_tracker_lite/presentation/widgets/base_bloc_consumer.dart';
 import 'package:flutter/material.dart';
@@ -17,51 +18,80 @@ class RecentExpensesList extends StatelessWidget {
         final data = state.isListExpanded
             ? state.expenses
             : state.expenses.take(4).toList();
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              if (!state.isListExpanded) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Recent Expenses",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => context.read<ExpensesBloc>().add(
-                        ExpensesListToggled(),
-                      ),
-                      child: Text(
-                        "See all",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          decoration: TextDecoration.underline,
+        return Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  if (!state.isListExpanded) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Recent Expenses",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
+                        InkWell(
+                          onTap: () => context.read<ExpensesBloc>().add(
+                            ExpensesListToggled(),
+                          ),
+                          child: Text(
+                            "See all",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-              ] else
-                BouncingArrow(),
+                    const SizedBox(height: 8),
+                  ] else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: BouncingArrow(),
+                    ),
 
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) =>
-                      _ExpenseItem(expense: data[index]),
-                  itemCount: data.length,
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) =>
+                          _ExpenseItem(expense: data[index]),
+                      itemCount: data.length,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (state.isListExpanded && state.expenses.length % kPerPage == 0)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: InkWell(
+                  onTap: () =>
+                      context.read<ExpensesBloc>().add(ExpensesFetched()),
+                  child: Chip(
+                    elevation: 5,
+                    shadowColor: Colors.grey.shade200,
+                    padding: EdgeInsets.all(4),
+                    color: WidgetStateProperty.all(Colors.white),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    label: Text(
+                      "Load more",
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),
+                  ),
                 ),
               ),
-            ],
-          ),
+          ],
         );
       },
     );

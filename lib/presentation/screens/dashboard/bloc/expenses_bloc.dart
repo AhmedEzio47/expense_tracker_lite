@@ -24,10 +24,10 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     ExpensesFetched event,
     Emitter<ExpensesState> emit,
   ) async {
-    emit(state.copyWith(status: Status.loading));
+    emit(state.copyWith(status: Status.loading, filter: event.filter));
 
     final result = await getExpensesUseCase(
-      GetExpensesParams(page: _page, filter: event.filter),
+      GetExpensesParams(page: _page, filter: event.filter ?? state.filter),
     );
 
     result.fold(
@@ -38,7 +38,9 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
           ..addAll(expenses);
         emit(
           state.copyWith(
-            status: expenses.isEmpty ? Status.empty : Status.success,
+            status: expenses.isEmpty && _page == 1
+                ? Status.empty
+                : Status.success,
             expenses: all,
           ),
         );
@@ -52,7 +54,7 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     Emitter<ExpensesState> emit,
   ) {
     _page = 1;
-    emit(ExpensesState());
+    emit(ExpensesState(isListExpanded: state.isListExpanded));
     add(ExpensesFetched(filter: event.filter));
   }
 
