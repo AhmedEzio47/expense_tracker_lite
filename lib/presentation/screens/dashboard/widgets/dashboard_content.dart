@@ -1,6 +1,7 @@
 import 'package:expense_tracker_lite/core/enums/expense_filter.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/add_expense_screen.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses/expenses_bloc.dart';
+import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/summary/summary_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,6 +61,8 @@ class _BottomNavBar extends StatelessWidget {
                 context.read<ExpensesBloc>().add(
                   ExpensesRefreshed(filter: ExpenseFilter.monthly),
                 );
+
+                context.read<SummaryBloc>().add(SummaryFetched());
               });
             },
             elevation: 0,

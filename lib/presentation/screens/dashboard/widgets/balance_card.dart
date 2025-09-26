@@ -1,11 +1,21 @@
+import 'package:expense_tracker_lite/core/constants.dart';
 import 'package:expense_tracker_lite/core/enums/balance_type.dart';
+import 'package:expense_tracker_lite/core/extensions/num_formatting.dart';
+import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/summary/summary_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final totalExpenses =
+        context.select((SummaryBloc bloc) => bloc.state.totalExpenses) ?? 0;
+
+    final totalIncome =
+        context.select((SummaryBloc bloc) => bloc.state.totalIncome) ?? 0;
+
     return Container(
       width: MediaQuery.of(context).size.width - 32,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -31,9 +41,9 @@ class BalanceCard extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
-                "\$ 2,548.00",
+                "\$ ${(kInitialBalance + totalIncome - totalExpenses).toMaxTwoDecimals()}",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 32,
@@ -45,9 +55,15 @@ class BalanceCard extends StatelessWidget {
           const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              _BalanceInfo(amount: "\$ 10,840.00", type: BalanceType.income),
-              _BalanceInfo(amount: "\$ 1,884.00", type: BalanceType.expenses),
+            children: [
+              _BalanceInfo(
+                amount: "\$ ${totalIncome.toMaxTwoDecimals()}",
+                type: BalanceType.income,
+              ),
+              _BalanceInfo(
+                amount: "\$ ${totalExpenses.toMaxTwoDecimals()}",
+                type: BalanceType.expenses,
+              ),
             ],
           ),
         ],

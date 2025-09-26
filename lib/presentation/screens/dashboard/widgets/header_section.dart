@@ -1,5 +1,6 @@
 import 'package:expense_tracker_lite/core/constants.dart';
 import 'package:expense_tracker_lite/core/enums/expense_filter.dart';
+import 'package:expense_tracker_lite/core/extensions/context_extensions.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses/expenses_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,18 +13,15 @@ class HeaderSection extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isListExpanded = context.select(
-      (ExpensesBloc bloc) => bloc.state.isListExpanded,
-    );
     final selectedFilter = useState(ExpenseFilter.monthly);
     return SizedBox(
-      height: !isListExpanded
+      height: context.shouldShowBalanceCard
           ? MediaQuery.of(context).size.height * 0.43
           : null,
       child: Stack(
         children: [
           Container(
-            height: !isListExpanded
+            height: context.shouldShowBalanceCard
                 ? MediaQuery.of(context).size.height * 0.35
                 : null,
             padding: const EdgeInsets.all(16),
@@ -81,7 +79,7 @@ class HeaderSection extends HookWidget {
               ],
             ),
           ),
-          if (!isListExpanded)
+          if (context.shouldShowBalanceCard)
             Positioned(
               top: MediaQuery.of(context).size.height * 0.17,
               child: const Align(

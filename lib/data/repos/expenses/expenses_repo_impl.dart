@@ -61,4 +61,38 @@ class ExpensesRepoImpl implements ExpensesRepo {
       return Left(AppException.fromException(ex));
     }
   }
+
+  @override
+  Result<double> getTotalExpenses() async {
+    try {
+      final query = database.expensesTable.selectOnly()
+        ..addColumns([database.expensesTable.amount])
+        ..where(database.expensesTable.isIncome.equals(false));
+      final result = await query.get();
+      final total = result.fold<double>(
+        0.0,
+        (sum, row) => sum + (row.read(database.expensesTable.amount) ?? 0.0),
+      );
+      return Right(total);
+    } catch (ex) {
+      return Left(AppException.fromException(ex));
+    }
+  }
+
+  @override
+  Result<double> getTotalIncome() async {
+    try {
+      final query = database.expensesTable.selectOnly()
+        ..addColumns([database.expensesTable.amount])
+        ..where(database.expensesTable.isIncome.equals(true));
+      final result = await query.get();
+      final total = result.fold<double>(
+        0.0,
+        (sum, row) => sum + (row.read(database.expensesTable.amount) ?? 0.0),
+      );
+      return Right(total);
+    } catch (ex) {
+      return Left(AppException.fromException(ex));
+    }
+  }
 }
