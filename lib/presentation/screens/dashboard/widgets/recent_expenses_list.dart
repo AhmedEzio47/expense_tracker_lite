@@ -1,4 +1,5 @@
 import 'package:expense_tracker_lite/core/extensions/date_formatting.dart';
+import 'package:expense_tracker_lite/core/extensions/num_formatting.dart';
 import 'package:expense_tracker_lite/data/models/expense_model.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/handlers/receipt_handler.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses/expenses_bloc.dart';
@@ -169,7 +170,7 @@ class _ExpenseItem extends StatelessWidget with ReceiptHandler {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '${expense.isIncome ? '+' : '-'} \$ ${expense.amount}',
+                  '${expense.isIncome ? '+' : '-'} \$ ${expense.amount.toMaxTwoDecimals()}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
