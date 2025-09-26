@@ -25,37 +25,7 @@ class RecentExpensesList extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  if (!state.isListExpanded) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Recent Expenses",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => context.read<ExpensesBloc>().add(
-                            ExpensesListToggled(),
-                          ),
-                          child: Text(
-                            "See all",
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                  ] else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: BouncingArrow(),
-                    ),
+                  _ListHeader(isListExpanded: state.isListExpanded),
 
                   Expanded(
                     child: ListView.builder(
@@ -68,31 +38,79 @@ class RecentExpensesList extends StatelessWidget {
                 ],
               ),
             ),
-            if (state.shouldShowLoadMore)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: InkWell(
-                  onTap: () =>
-                      context.read<ExpensesBloc>().add(ExpensesFetched()),
-                  child: Chip(
-                    elevation: 5,
-                    shadowColor: Colors.grey.shade200,
-                    padding: EdgeInsets.all(4),
-                    color: WidgetStateProperty.all(Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      side: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    label: Text(
-                      "Load more",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                  ),
-                ),
-              ),
+            if (state.shouldShowLoadMore) _LoadMoreButton(),
           ],
         );
       },
+    );
+  }
+}
+
+class _LoadMoreButton extends StatelessWidget {
+  const _LoadMoreButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: InkWell(
+        onTap: () => context.read<ExpensesBloc>().add(ExpensesFetched()),
+        child: Chip(
+          elevation: 5,
+          shadowColor: Colors.grey.shade200,
+          padding: EdgeInsets.all(4),
+          color: WidgetStateProperty.all(Colors.white),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+            side: BorderSide(color: Colors.grey.shade300),
+          ),
+          label: Text(
+            "Load more",
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListHeader extends StatelessWidget {
+  const _ListHeader({required this.isListExpanded});
+
+  final bool isListExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (!isListExpanded) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Recent Expenses",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+              ),
+              InkWell(
+                onTap: () =>
+                    context.read<ExpensesBloc>().add(ExpensesListToggled()),
+                child: Text(
+                  "See all",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ] else
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: BouncingArrow(),
+          ),
+      ],
     );
   }
 }
