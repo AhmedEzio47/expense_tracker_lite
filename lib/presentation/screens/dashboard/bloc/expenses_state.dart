@@ -13,6 +13,11 @@ final class ExpensesState extends BaseState {
   final bool isListExpanded;
   final ExpenseFilter filter;
 
+  bool get shouldShowLoadMore =>
+      status == Status.success &&
+      expenses.length % kPerPage == 0 &&
+      isListExpanded;
+
   ExpensesState copyWith({
     Status? status,
     AppException? failure,

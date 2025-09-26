@@ -1,6 +1,5 @@
 import 'package:expense_tracker_lite/core/extensions/date_formatting.dart';
 import 'package:expense_tracker_lite/data/models/expense_model.dart';
-import 'package:expense_tracker_lite/data/repos/expenses/expenses_repo_impl.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/expenses_bloc.dart';
 import 'package:expense_tracker_lite/presentation/widgets/base_bloc_consumer.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +68,7 @@ class RecentExpensesList extends StatelessWidget {
                 ],
               ),
             ),
-            if (state.isListExpanded && state.expenses.length % kPerPage == 0)
+            if (state.shouldShowLoadMore)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: InkWell(
