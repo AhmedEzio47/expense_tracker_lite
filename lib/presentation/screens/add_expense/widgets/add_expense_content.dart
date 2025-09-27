@@ -1,15 +1,19 @@
 import 'package:expense_tracker_lite/core/enums/category.dart';
 import 'package:expense_tracker_lite/core/extensions/context_extensions.dart';
+import 'package:expense_tracker_lite/core/extensions/date_formatting.dart';
 import 'package:expense_tracker_lite/presentation/common/status.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/bloc/add_expense_bloc.dart';
+import 'package:expense_tracker_lite/presentation/screens/add_expense/handlers/expense_input_validator.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/handlers/receipt_handler.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/widgets/categories_grid.dart';
+import 'package:expense_tracker_lite/presentation/widgets/app_snack_bar.dart';
 import 'package:expense_tracker_lite/presentation/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AddExpenseContent extends HookWidget with ReceiptHandler {
+class AddExpenseContent extends HookWidget
+    with ReceiptHandler, ExpenseInputValidator {
   const AddExpenseContent({super.key});
 
   @override
@@ -100,7 +104,7 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
             AppTextField(
               controller: dateController,
               label: 'Date',
-              hintText: "24/09/25",
+              hintText: selectedDate.value.formattedYMD,
               readOnly: true,
               suffixIcon: Icons.calendar_month_outlined,
               onTap: () async {
@@ -111,8 +115,7 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
                   lastDate: DateTime(2030),
                 );
                 if (picked != null) {
-                  dateController.text =
-                      "${picked.day}/${picked.month}/${picked.year}";
+                  dateController.text = picked.formattedYMD;
                   selectedDate.value = picked;
                 }
               },
@@ -167,20 +170,25 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (selectedCategory == null ||
-                            amountController.text.isEmpty ||
-                            dateController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Please fill all required fields"),
-                            ),
+                        final error = validateExpense(
+                          category: selectedCategory,
+                          amountText: amountController.text,
+                          date: selectedDate.value,
+                        );
+
+                        if (error != null) {
+                          AppSnackBar.show(
+                            context: context,
+                            message: error,
+                            snackBarType: SnackBarTypes.error,
                           );
+
                           return;
                         }
 
                         context.read<AddExpenseBloc>().add(
                           ExpenseSubmitted(
-                            category: selectedCategory,
+                            category: selectedCategory!,
                             amount: amountInBaseCurrency,
                             date: selectedDate.value,
                             receiptImagePath: receiptPath.value,
