@@ -1,5 +1,5 @@
 import 'package:expense_tracker_lite/di/di.dart';
-import 'package:expense_tracker_lite/presentation/screens/dashboard/dashboard_screen.dart';
+import 'package:expense_tracker_lite/presentation/screens/navigation_container/navigation_container_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1D55F3)),
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
-      home: const DashboardScreen(),
+      home: const NavigationContainerScreen(),
     );
   }
 }
