@@ -1,5 +1,6 @@
 import 'package:expense_tracker_lite/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:expense_tracker_lite/presentation/screens/navigation_container/bloc/app_config_bloc.dart';
+import 'package:expense_tracker_lite/presentation/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +30,7 @@ enum NavigationTab {
       case wallet:
         return Scaffold(body: Center(child: Text('Wallet')));
       case profile:
-        return Scaffold(body: Center(child: Text('Profile')));
+        return ProfileScreen();
     }
   }
 }
