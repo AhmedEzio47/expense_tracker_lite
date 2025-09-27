@@ -1,6 +1,6 @@
 import 'package:expense_tracker_lite/core/constants.dart';
 import 'package:expense_tracker_lite/core/enums/balance_type.dart';
-import 'package:expense_tracker_lite/core/extensions/num_formatting.dart';
+import 'package:expense_tracker_lite/core/extensions/context_extensions.dart';
 import 'package:expense_tracker_lite/presentation/screens/dashboard/bloc/summary/summary_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +43,9 @@ class BalanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "\$ ${(kInitialBalance + totalIncome - totalExpenses).toMaxTwoDecimals()}",
+                context.convertedAmount(
+                  (kInitialBalance + totalIncome - totalExpenses),
+                ),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 32,
@@ -57,11 +59,11 @@ class BalanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _BalanceInfo(
-                amount: "\$ ${totalIncome.toMaxTwoDecimals()}",
+                amount: context.convertedAmount(totalIncome),
                 type: BalanceType.income,
               ),
               _BalanceInfo(
-                amount: "\$ ${totalExpenses.toMaxTwoDecimals()}",
+                amount: context.convertedAmount(totalExpenses),
                 type: BalanceType.expenses,
               ),
             ],
