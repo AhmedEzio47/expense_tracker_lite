@@ -170,7 +170,7 @@ class _ExpenseItem extends StatelessWidget with ReceiptHandler {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '${expense.isIncome ? '+' : '-'} ${context.convertedAmount(expense.amount)}',
+                  '${expense.isIncome ? '+' : '-'} ${context.converter().convertedAmount(expense.amount)}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(

@@ -90,8 +90,10 @@ class AddExpenseContent extends HookWidget
 
             AppTextField(
               controller: amountController,
-              label: 'Amount in  (${context.getSelectedCurrencySymbol()})',
-              hintText: "${context.getSelectedCurrencySymbol()} 50,000",
+              label:
+                  'Amount in  (${context.converter().getSelectedCurrencySymbol()})',
+              hintText:
+                  "${context.converter().getSelectedCurrencySymbol()} 50,000",
               keyboardType: TextInputType.number,
             ),
 
@@ -183,6 +185,7 @@ class AddExpenseContent extends HookWidget
                         }
 
                         final amountInBaseCurrency = context
+                            .converter(listenable: false)
                             .amountInBaseCurrency(
                               double.tryParse(amountController.text) ?? 0.0,
                             );

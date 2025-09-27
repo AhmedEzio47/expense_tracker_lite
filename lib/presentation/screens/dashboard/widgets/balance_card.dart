@@ -43,7 +43,7 @@ class BalanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                context.convertedAmount(
+                context.converter().convertedAmount(
                   (kInitialBalance + totalIncome - totalExpenses),
                 ),
                 style: TextStyle(
@@ -59,11 +59,11 @@ class BalanceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _BalanceInfo(
-                amount: context.convertedAmount(totalIncome),
+                amount: context.converter().convertedAmount(totalIncome),
                 type: BalanceType.income,
               ),
               _BalanceInfo(
-                amount: context.convertedAmount(totalExpenses),
+                amount: context.converter().convertedAmount(totalExpenses),
                 type: BalanceType.expenses,
               ),
             ],
