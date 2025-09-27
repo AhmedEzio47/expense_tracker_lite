@@ -13,14 +13,19 @@ extension DashboardExpensesList on BuildContext {
         select((SummaryBloc bloc) => bloc.state.totalExpenses != null);
   }
 
+  String get _selectedCurrency => watch<AppConfigBloc>().state.selectedCurrency;
+  num? get _rate =>
+      watch<ExchangeRatesBloc>().state.todayRate(_selectedCurrency);
+
   String convertedAmount(double amount) {
-    final selectedCurrency = read<AppConfigBloc>().state.selectedCurrency;
-    final rate = read<ExchangeRatesBloc>().state.todayRate(selectedCurrency);
-
-    return '${_getCurrencySymbol(selectedCurrency)} ${(amount * (rate ?? 1)).toMaxTwoDecimals()}';
+    return '${getSelectedCurrencySymbol()} ${(amount * (_rate ?? 1)).toMaxTwoDecimals()}';
   }
-}
 
-String _getCurrencySymbol(String currencyCode) {
-  return NumberFormat.simpleCurrency(name: currencyCode).currencySymbol;
+  String getSelectedCurrencySymbol() {
+    return NumberFormat.simpleCurrency(name: _selectedCurrency).currencySymbol;
+  }
+
+  double amountInBaseCurrency(double amount) {
+    return amount / (_rate ?? 1);
+  }
 }

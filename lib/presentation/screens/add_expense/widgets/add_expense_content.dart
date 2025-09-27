@@ -1,4 +1,5 @@
 import 'package:expense_tracker_lite/core/enums/category.dart';
+import 'package:expense_tracker_lite/core/extensions/context_extensions.dart';
 import 'package:expense_tracker_lite/presentation/common/status.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/bloc/add_expense_bloc.dart';
 import 'package:expense_tracker_lite/presentation/screens/add_expense/handlers/receipt_handler.dart';
@@ -22,6 +23,10 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
     final selectedCategory = context
         .select((AddExpenseBloc bloc) => bloc.state)
         .selectedCategory;
+
+    final amountInBaseCurrency = context.amountInBaseCurrency(
+      double.tryParse(amountController.text) ?? 0.0,
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -85,8 +90,8 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
 
             AppTextField(
               controller: amountController,
-              label: 'Amount',
-              hintText: "\$50,000",
+              label: 'Amount in  (${context.getSelectedCurrencySymbol()})',
+              hintText: "${context.getSelectedCurrencySymbol()} 50,000",
               keyboardType: TextInputType.number,
             ),
 
@@ -176,8 +181,7 @@ class AddExpenseContent extends HookWidget with ReceiptHandler {
                         context.read<AddExpenseBloc>().add(
                           ExpenseSubmitted(
                             category: selectedCategory,
-                            amount:
-                                double.tryParse(amountController.text) ?? 0.0,
+                            amount: amountInBaseCurrency,
                             date: selectedDate.value,
                             receiptImagePath: receiptPath.value,
                           ),
