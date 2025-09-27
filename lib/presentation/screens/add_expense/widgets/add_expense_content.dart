@@ -28,10 +28,6 @@ class AddExpenseContent extends HookWidget
         .select((AddExpenseBloc bloc) => bloc.state)
         .selectedCategory;
 
-    final amountInBaseCurrency = context.amountInBaseCurrency(
-      double.tryParse(amountController.text) ?? 0.0,
-    );
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -185,6 +181,11 @@ class AddExpenseContent extends HookWidget
 
                           return;
                         }
+
+                        final amountInBaseCurrency = context
+                            .amountInBaseCurrency(
+                              double.tryParse(amountController.text) ?? 0.0,
+                            );
 
                         context.read<AddExpenseBloc>().add(
                           ExpenseSubmitted(
