@@ -18,6 +18,10 @@ mixin ExpenseInputValidator {
     if (date == null) {
       return "Please select a date";
     }
+
+    if (date.isAfter(DateTime.now())) {
+      return "You can not select an upcoming date";
+    }
     return null; // valid
   }
 }
