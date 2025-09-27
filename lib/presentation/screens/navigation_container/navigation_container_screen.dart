@@ -17,7 +17,10 @@ class NavigationContainerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => di<AppConfigBloc>()),
+        BlocProvider(
+          create: (context) =>
+              di<AppConfigBloc>()..add(SelectedCurrencyFetched()),
+        ),
         BlocProvider(
           create: (context) => di<ExchangeRatesBloc>()
             ..add(ExchangeRatesForTodayFetched(baseCurrency: kBaseCurrency)),

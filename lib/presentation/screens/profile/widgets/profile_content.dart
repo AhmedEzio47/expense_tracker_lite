@@ -1,15 +1,19 @@
 import 'package:country_flags/country_flags.dart';
-import 'package:expense_tracker_lite/core/constants.dart';
 import 'package:expense_tracker_lite/data/models/exchange_rate_model.dart';
+import 'package:expense_tracker_lite/presentation/screens/navigation_container/bloc/app_config_bloc.dart';
 import 'package:expense_tracker_lite/presentation/screens/profile/bloc/exchange_rates_bloc.dart';
 import 'package:expense_tracker_lite/presentation/widgets/base_bloc_consumer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileContent extends StatelessWidget {
   const ProfileContent({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final selectedCurrency = context.select(
+      (AppConfigBloc bloc) => bloc.state.selectedCurrency,
+    );
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
@@ -31,7 +35,7 @@ class ProfileContent extends StatelessWidget {
                     const SizedBox(height: 8),
                     DropdownButtonFormField<ExchangeRateModel>(
                       initialValue: state.todayExchangeRate?.rates?.firstWhere(
-                        (e) => e.targetCurrency == kBaseCurrency,
+                        (e) => e.targetCurrency == selectedCurrency,
                       ),
                       items: state.todayExchangeRate?.rates?.map((rate) {
                         return DropdownMenuItem(
@@ -52,7 +56,13 @@ class ProfileContent extends StatelessWidget {
                           ),
                         );
                       }).toList(),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        if (value?.targetCurrency != null) {
+                          context.read<AppConfigBloc>().add(
+                            CurrencySelected(value!.targetCurrency!),
+                          );
+                        }
+                      },
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey.shade100,

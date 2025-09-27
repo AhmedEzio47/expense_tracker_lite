@@ -9,3 +9,13 @@ class NavigationTabSelected extends AppConfigEvent {
 
   final NavigationTab tab;
 }
+
+class CurrencySelected extends AppConfigEvent {
+  const CurrencySelected(this.currencyCode);
+
+  final String currencyCode;
+}
+
+class SelectedCurrencyFetched extends AppConfigEvent {
+  const SelectedCurrencyFetched();
+}

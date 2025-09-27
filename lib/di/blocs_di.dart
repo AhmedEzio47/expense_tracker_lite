@@ -10,7 +10,7 @@ void injectBlocs() {
   di.registerFactory(() => AddExpenseBloc(di()));
   di.registerFactory(() => ExpensesBloc(di()));
   di.registerFactory(() => SummaryBloc(di()));
-  di.registerFactory(() => AppConfigBloc());
+  di.registerFactory(() => AppConfigBloc(di()));
   di.registerFactory(
     () => ExchangeRatesBloc(getTodayExchangeRateUseCase: di()),
   );

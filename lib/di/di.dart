@@ -10,7 +10,7 @@ GetIt di = GetIt.instance;
 
 Future<void> injectDependencies() async {
   await injectNetworkDependencies();
-  injectDatabase();
+  await injectDatabase();
   injectRepos();
   injectUseCases();
   injectBlocs();
