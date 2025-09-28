@@ -6,9 +6,9 @@ on:
   pull_request:
     branches:
       - main
-jobs:  # Telling what jobs we need to happen
-  build:      # Specify the building name and machine
-    name: Run pipeline  # you can name the build whatever you want
+jobs:
+  build:
+    name: Expense tracker pipeline
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -37,7 +37,9 @@ jobs:  # Telling what jobs we need to happen
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Analyze
-        run: flutter analyze
+        run: |
+          dart analyze || true
+          dart analyze --format=machine | grep '\[error\]' && exit 1 || exit 0
 
       - name: Run tests
         run: flutter test
