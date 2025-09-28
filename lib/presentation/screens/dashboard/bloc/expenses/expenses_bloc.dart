@@ -1,4 +1,3 @@
-import 'package:expense_tracker_lite/core/constants.dart';
 import 'package:expense_tracker_lite/core/custom_types/app_exception.dart';
 import 'package:expense_tracker_lite/core/enums/expense_filter.dart';
 import 'package:expense_tracker_lite/data/models/expense_model.dart';
@@ -36,13 +35,14 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
           emit(state.copyWith(status: Status.failure, failure: failure)),
       (expenses) {
         final List<ExpenseModel> all = List.from(state.expenses)
-          ..addAll(expenses);
+          ..addAll(expenses.$1);
         emit(
           state.copyWith(
-            status: expenses.isEmpty && _page == 1
+            status: expenses.$1.isEmpty && _page == 1
                 ? Status.empty
                 : Status.success,
             expenses: all,
+            totalRecords: expenses.$2,
           ),
         );
         _page++;

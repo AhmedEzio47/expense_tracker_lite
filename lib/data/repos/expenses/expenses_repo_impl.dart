@@ -34,7 +34,10 @@ class ExpensesRepoImpl implements ExpensesRepo {
   }
 
   @override
-  Result<List<ExpenseModel>> getExpenses(int page, ExpenseFilter filter) async {
+  Result<(List<ExpenseModel>, int)> getExpenses(
+    int page,
+    ExpenseFilter filter,
+  ) async {
     try {
       final query = database.expensesTable.select();
       switch (filter) {
@@ -64,7 +67,8 @@ class ExpensesRepoImpl implements ExpensesRepo {
       final expenses = result
           .map((e) => ExpenseModel.fromTableData(e))
           .toList();
-      return Right(expenses);
+      final totalRecords = await _getTotalRecords();
+      return Right((expenses, totalRecords));
     } catch (ex) {
       return Left(AppException.fromException(ex));
     }
@@ -102,5 +106,11 @@ class ExpensesRepoImpl implements ExpensesRepo {
     } catch (ex) {
       return Left(AppException.fromException(ex));
     }
+  }
+
+  Future<int> _getTotalRecords() async {
+    final query = database.expensesTable.select();
+    final count = await query.get().then((rows) => rows.length);
+    return count;
   }
 }

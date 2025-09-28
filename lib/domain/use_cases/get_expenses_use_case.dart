@@ -5,13 +5,13 @@ import 'package:expense_tracker_lite/data/repos/expenses/expenses_repo.dart';
 import 'package:expense_tracker_lite/domain/use_cases/use_case.dart';
 
 class GetExpensesUseCase
-    implements UseCase<List<ExpenseModel>, GetExpensesParams> {
+    implements UseCase<(List<ExpenseModel>, int), GetExpensesParams> {
   const GetExpensesUseCase(this.repo);
 
   final ExpensesRepo repo;
 
   @override
-  Result<List<ExpenseModel>> call(GetExpensesParams params) =>
+  Result<(List<ExpenseModel>, int)> call(GetExpensesParams params) =>
       repo.getExpenses(params.page, params.filter);
 }
 

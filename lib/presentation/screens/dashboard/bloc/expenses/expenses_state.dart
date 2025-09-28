@@ -7,15 +7,17 @@ final class ExpensesState extends BaseState {
     this.expenses = const [],
     this.isListExpanded = false,
     this.filter = ExpenseFilter.monthly,
+    this.totalRecords = 0,
   });
 
   final List<ExpenseModel> expenses;
   final bool isListExpanded;
   final ExpenseFilter filter;
+  final int totalRecords;
 
   bool get shouldShowLoadMore =>
       status == Status.success &&
-      expenses.length % kPerPage == 0 &&
+      expenses.length != totalRecords &&
       isListExpanded;
 
   ExpensesState copyWith({
@@ -24,6 +26,7 @@ final class ExpensesState extends BaseState {
     List<ExpenseModel>? expenses,
     bool? isListExpanded,
     ExpenseFilter? filter,
+    int? totalRecords,
   }) {
     return ExpensesState(
       status: status ?? this.status,
@@ -31,6 +34,7 @@ final class ExpensesState extends BaseState {
       expenses: expenses ?? this.expenses,
       isListExpanded: isListExpanded ?? this.isListExpanded,
       filter: filter ?? this.filter,
+      totalRecords: totalRecords ?? this.totalRecords,
     );
   }
 
