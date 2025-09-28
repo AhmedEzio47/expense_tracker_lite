@@ -14,16 +14,21 @@ class HeaderSection extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedFilter = useState(ExpenseFilter.monthly);
-    return SizedBox(
+    final double collapsedHeight = MediaQuery.of(context).size.height * 0.17;
+    final animationDuration = Duration(milliseconds: 400);
+
+    return AnimatedContainer(
+      duration: animationDuration,
       height: context.shouldShowBalanceCard
           ? MediaQuery.of(context).size.height * 0.43
-          : null,
+          : collapsedHeight,
       child: Stack(
         children: [
-          Container(
+          AnimatedContainer(
+            duration: animationDuration,
             height: context.shouldShowBalanceCard
                 ? MediaQuery.of(context).size.height * 0.35
-                : null,
+                : collapsedHeight,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -79,14 +84,19 @@ class HeaderSection extends HookWidget {
               ],
             ),
           ),
-          if (context.shouldShowBalanceCard)
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.17,
-              child: const Align(
-                alignment: Alignment.bottomCenter,
+
+          // if (context.shouldShowBalanceCard)
+          Positioned(
+            top: collapsedHeight,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: AnimatedOpacity(
+                opacity: context.shouldShowBalanceCard ? 1 : 0,
+                duration: animationDuration,
                 child: BalanceCard(),
               ),
             ),
+          ),
         ],
       ),
     );
