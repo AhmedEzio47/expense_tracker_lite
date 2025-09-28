@@ -92,6 +92,13 @@ The app uses a page-based pagination strategy to efficiently load expenses witho
       This approach is chosen, so the design of the add expense screen stays the same and for better UX in my opinion.
       The user can selects it in the profile screen.
    - See all button expands the list in place instead of navigating to a dedicated screen
+   - I've chosen the load more button approach, as the database is very fast and the infinite scrolling would look like there's no pagination
+   - The expense list item that has a receipt will show a small link icon, if tapped will show the attached receipt image as an overlay
+
+## Room for improvement
+   - The expense amount can be extracted automatically from the receipt image.
+   - Biometric authentication would add a layer of security for the user's data.
+   - Categories can be stored as a database table and the user can add new or delete existing ones.
 
 
 ## Screenshots
