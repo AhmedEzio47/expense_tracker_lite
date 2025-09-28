@@ -14,8 +14,10 @@ extension DashboardExpensesList on BuildContext {
   }
 
   CurrencyConverter converter({bool listenable = true}) {
-    final currency = read<AppConfigBloc>().state.selectedCurrency;
-    final rate = read<ExchangeRatesBloc>().state.todayRate(currency);
+    final currency =
+        (listenable ? watch : read)<AppConfigBloc>().state.selectedCurrency;
+    final rate = (listenable ? watch : read)<ExchangeRatesBloc>().state
+        .todayRate(currency);
     return CurrencyConverter(selectedCurrency: currency, rate: rate);
   }
 }
