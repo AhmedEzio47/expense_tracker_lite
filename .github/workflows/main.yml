@@ -53,13 +53,13 @@ jobs:
           name: Releases
           path: build/app/outputs/flutter-apk/app-release.apk
 
-      - name: Upload APK to Google Drive
-        uses: adityak74/google-drive-upload-git-action@main
-        with:
-          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
-          filename: build/app/outputs/flutter-apk/app-release.apk
-          folderId: 1-UN4jWOJrdpB5Nn7fYhN9eLhMD58dkuX
-          overwrite: "true"
-          name: expense_tracker_lite
+#      - name: Upload APK to Google Drive
+#        uses: adityak74/google-drive-upload-git-action@main
+#        with:
+#          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
+#          filename: build/app/outputs/flutter-apk/app-release.apk
+#          folderId: 1-UN4jWOJrdpB5Nn7fYhN9eLhMD58dkuX
+#          overwrite: "true"
+#          name: expense_tracker_lite
 
 
