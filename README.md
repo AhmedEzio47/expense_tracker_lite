@@ -30,12 +30,18 @@ dependencies and scale the application over time.
 
 ## Database
 
-For local data storage, the app utilizes `Drift` which is built on top of `SQLite`, it's used for storing expenses data.
-The app also utilizes `Hive` which is a lightweight and fast key-value database that works
-well with Flutter, it's used for caching as a part of the network layer in the `flutter_common_package`.
-Both `Drift` and `Hive` do not require a platform-specific database setup, making them easy to
-integrate and maintain across different platforms. And it can be integrated with `dio` easily
-by using `dio_cache_interceptor_hive_store`
+- For local data storage, the app utilizes **Drift**:  
+  - Built on top of SQLite.  
+  - Used for storing expenses data.  
+
+- The app also utilizes **Hive**:  
+  - A lightweight and fast key-value database that works well with Flutter.  
+  - Used for caching as part of the network layer in the `flutter_common_package`.  
+
+- Both Drift and Hive:  
+  - Do not require a platform-specific database setup.  
+  - Are easy to integrate and maintain across different platforms.  
+  - Can be integrated with `dio` easily by using `dio_cache_interceptor_hive_store`.
 
 ## State management
 
@@ -110,6 +116,3 @@ The app uses a page-based pagination strategy to efficiently load expenses witho
 
 
 ![See_All](assets/screenshots/see_all.png)
-
-
-
