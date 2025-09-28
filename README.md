@@ -107,6 +107,20 @@ The app uses a page-based pagination strategy to efficiently load expenses witho
    - Categories can be stored as a database table and the user can add new or delete existing ones.
 
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and delivery.
+The workflow automatically runs on each push and pull request to ensure code quality and provide build artifacts.
+
+- **Static Analysis**: Runs `dart analyze` to check for code issues.
+- **Testing**: Runs `flutter test` to execute all unit and widget tests.
+- **Build**: Builds the Android APK using `flutter build apk`.
+- **Artifacts**: The resulting APK file is uploaded as a downloadable artifact from the Actions run.
+
+> Note: An experimental step to upload the APK to Google Drive was included but is now commented out.  
+> For distributing builds.
+
+
 ## Screenshots
 
 ![Home Screen](assets/screenshots/home.png)
