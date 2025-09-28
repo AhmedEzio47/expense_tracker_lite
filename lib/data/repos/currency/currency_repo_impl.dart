@@ -28,6 +28,9 @@ class CurrencyRepoImpl implements CurrencyRepo {
           ),
           requestType: RequestType.get,
           parameters: {'app_id': appId, 'base': base},
+          shouldCacheResponse: true,
+          maxCacheAge:
+              APIEndpoints.exchangeRates.endpoint.cacheValidityDuration,
         ),
       );
       return Right(
