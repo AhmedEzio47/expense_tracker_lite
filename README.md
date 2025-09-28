@@ -97,7 +97,11 @@ The app uses a page-based pagination strategy to efficiently load expenses witho
 ## Screenshots
 
 ![Home Screen](assets/screenshots/home.png)
+
+
 ![Add_Expense](assets/screenshots/add_expense.png)
+
+
 ![See_All](assets/screenshots/see_all.png)
 
 
