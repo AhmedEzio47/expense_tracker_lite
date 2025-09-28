@@ -39,7 +39,7 @@ jobs:  # Telling what jobs we need to happen
         run: flutter build apk --release --dart-define=APP_ID=827ae0d34d914c8da1d878cfa4095900
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Releases
           path: build/app/outputs/flutter-apk/app-release.apk
